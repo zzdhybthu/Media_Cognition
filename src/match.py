@@ -34,6 +34,6 @@ if __name__ == "__main__":
     print("Max probability:", max_prob)
     print("Max index:", max_index)
     
-    max_prob, max_index = match.Txt2Img("a gray bin", list(map(Image.open, ["image/gray.jpg", "image/green.jpg", "image/red.jpg", "image/blue.jpg", "image/apriltag.png"])))
+    max_prob, max_index = match.Txt2Img("a blue bin", list(map(Image.open, ["image/gray.jpg", "image/green.jpg", "image/red.jpg", "image/blue.jpg", "image/apriltag.png"])))
     print("Max probability:", max_prob)
     print("Max index:", max_index)

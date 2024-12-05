@@ -67,7 +67,7 @@ proposal
 """
 MODEL_ID = "yolov10m"
 IMAGE_SIZE = 640
-THRERSHOLD = 0.2
+THRERSHOLD = 0.5
 
 
 """
