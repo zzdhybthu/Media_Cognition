@@ -17,3 +17,18 @@ class Camera():
     def Release(self):
         self.cap.release()
         cv2.destroyAllWindows()
+    
+
+myCamera = Camera()
+img = myCamera.Capture()
+# img.save("camera_image.jpg")
+# img.show()
+myCamera.Release()
+
+
+# image_path = './image/test4.jpg'
+# with Image.open(image_path) as img:
+# 此处硬切割，必须保证相机位置不变！！！
+cropped_img = img.crop((220, 140, 450, 380))
+cropped_img.show()
+# cropped_img.save('cropped_image.jpg')
