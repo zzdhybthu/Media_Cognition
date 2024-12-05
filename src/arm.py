@@ -18,7 +18,8 @@ class Arm(MyCobot280):
         self.Forward([x, y, PUMP_Z_2, *PUMP_ANGLE], speed=PUMP_SPEED)
         time.sleep(PUMP_TIME_1)
         self.Forward([x, y, PUMP_Z_3, *PUMP_ANGLE])
-        self.Forward(COORDS['c'][0])
+        # self.Forward(COORDS['c'][0])
+        self.Forward(TRANSIT_COORD)
         return
 
     def PUT(self, tag):
@@ -53,7 +54,10 @@ class Arm(MyCobot280):
             return EXCEPTION
 
 if __name__ == "__main__":
-    arm = Arm('COM5')
+    arm = Arm('COM17')
     arm.INIT()
     arm.GET(0.5, 0.5)
-    arm.PUT('c')
+    arm.PUT('ur')
+
+    # arm.release_all_servos()
+    # print(arm.get_coords())
