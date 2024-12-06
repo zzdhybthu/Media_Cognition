@@ -1,6 +1,7 @@
 import cv2
 from constants import *
 from PIL import Image
+from proposal import Proposal
 
 class Camera():
     def __init__(self):
@@ -32,3 +33,10 @@ myCamera.Release()
 cropped_img = img.crop((220, 140, 450, 380))
 cropped_img.show()
 # cropped_img.save('cropped_image.jpg')
+
+proposal = Proposal()
+w, h = cropped_img.size
+annotated_image, annotations = proposal.Propose(cropped_img, return_image=True)
+print(annotations)
+cv2.imshow("Annotated Image", annotated_image)
+cv2.waitKey(0)

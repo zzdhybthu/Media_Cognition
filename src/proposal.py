@@ -3,11 +3,16 @@ from constants import *
 import cv2
 from PIL import Image
 import numpy as np
+import os
 
 
 class Proposal():
     def __init__(self):
-        self.m = YOLOv10.from_pretrained(f'jameslahm/{MODEL_ID}')
+        # if os.path.exists("./yolov10n.pt"):
+        #     self.m = YOLOv10.from_pretrained("yolov10n.pt", cache_dir='.')
+        # else:
+        #     self.m = YOLOv10.from_pretrained(f'jameslahm/{MODEL_ID}')
+        self.m = YOLOv10('yolov10s.pt')
     
     def Propose4(self, image: Image.Image, return_image=False):
         predicts = []
@@ -78,7 +83,7 @@ class Proposal():
 
 if __name__ == "__main__":
     proposal = Proposal()
-    image = "image/test1.jpg"
+    image = "image/test4.jpg"
     image = Image.open(image, formats=["JPEG"])
     image = image.convert("RGB")
     annotated_image, annotations = proposal.Propose(image, return_image=True)
