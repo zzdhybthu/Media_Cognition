@@ -86,6 +86,15 @@ CAMERA_IDX = 0
 
 
 """
+apriltag
+"""
+APRILTAG_IMAGE = {
+    "ul": "./image/apriltag_ul.jpg",
+    "dr": "./image/apriltag_dr.jpg"
+}
+
+
+"""
 main
 """
 BIN_IMAGE = [
