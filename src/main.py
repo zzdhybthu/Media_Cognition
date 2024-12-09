@@ -1,3 +1,4 @@
+
 import threading
 import keyboard
 from matplotlib import pyplot as plt
@@ -26,9 +27,16 @@ class TOP():
         self.proposal = Proposal()
         print("All Initializations Completed\n")
     
-    def SplitPrompt(self, prompt: str):
-        assert 'put' and 'into' in prompt.lower()
-        return prompt.split('put')[1].split('into')[0].strip(), prompt.split('into')[1].strip()
+    def SplitPrompt():
+        prompt = ""
+        with open(r'prompt.txt','r',encoding='utf-8') as test:
+            test.seek(0, 0)
+            prompt = test.readline()   
+        prompt = prompt.split(' ')
+        obj = prompt[1]
+        box = prompt[3]
+        # print(type((obj, box)))
+        return (obj, box)
     
     def Process(self):
         print("==================== Process ====================")
@@ -36,9 +44,8 @@ class TOP():
         self.arm.INIT()
         
         print("Listen and Recognize ...")
-        self.audio.Listen()
-        self.audio.Recognize()
-        prompt = self.audio.Prompt
+        self.audio.listen_and_recognize()
+        prompt = self.SplitPrompt()
         if prompt is None:
             raise ValueError("Failed to recognize audio")
         from_object, to_object = self.SplitPrompt(prompt)
@@ -77,14 +84,48 @@ class TOP():
         
 
 if __name__ == '__main__':
-    top = TOP()
-    while True:
-        print("Press Enter to start ...")
-        keyboard.wait("enter")
-        threading.Thread(target=top.Process).start()
-        print("Press Enter to restart / Press Esc to exit ...")
-        if keyboard.wait("esc"):
-            break
-    print("Exiting ...")
-    top.camera.Release()
-    print("Exited")
+
+    # top = TOP()
+    # while True:
+    #     print("Press Enter to start ...")
+    #     keyboard.wait("enter")
+    #     threading.Thread(target=top.Process).start()
+    #     print("Press Enter to restart / Press Esc to exit ...")
+    #     if keyboard.wait("esc"):
+    #         break
+    # print("Exiting ...")
+    # top.camera.Release()
+    # print("Exited")
+
+    myCamera = Camera()
+    img = myCamera.Capture()
+    # img.save("camera_image.jpg")
+    # img.show()
+    myCamera.Release()
+
+
+    # image_path = './image/test4.jpg'
+    # with Image.open(image_path) as img:
+    # 此处硬切割，必须保证相机位置不变！！！
+    cropped_img = img.crop((220, 140, 450, 380)) # 230*240
+    cropped_img.show()
+    # cropped_img.save('cropped_image.jpg')
+
+    proposal = Proposal()
+    w, h = cropped_img.size
+    annotated_image, annotations = proposal.Propose(cropped_img, return_image=True)
+    print(annotations)
+    cv2.imshow("Annotated Image", annotated_image)
+    cv2.waitKey(0)
+
+    arm = Arm('COM17')
+    arm.INIT()
+
+    for i in range(len(annotations)):
+        coords = annotations[i]["box"]
+
+        x_norm = (coords[0] + coords[2]) / (2*230)
+        y_norm = (coords[1] + coords[3]) / (2*240)
+
+        arm.GET(pixel_x = x_norm, pixel_y = y_norm)
+        arm.PUT('ur')
