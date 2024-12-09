@@ -26,9 +26,16 @@ class TOP():
         self.proposal = Proposal()
         print("All Initializations Completed\n")
     
-    def SplitPrompt(self, prompt: str):
-        assert 'put' and 'into' in prompt.lower()
-        return prompt.split('put')[1].split('into')[0].strip(), prompt.split('into')[1].strip()
+    def SplitPrompt():
+        prompt = ""
+        with open(r'prompt.txt','r',encoding='utf-8') as test:
+            test.seek(0, 0)
+            prompt = test.readline()   
+        prompt = prompt.split(' ')
+        obj = prompt[1]
+        box = prompt[3]
+        # print(type((obj, box)))
+        return (obj, box)
     
     def Process(self):
         print("==================== Process ====================")
@@ -36,9 +43,8 @@ class TOP():
         self.arm.INIT()
         
         print("Listen and Recognize ...")
-        self.audio.Listen()
-        self.audio.Recognize()
-        prompt = self.audio.Prompt
+        self.audio.listen_and_recognize()
+        prompt = self.SplitPrompt()
         if prompt is None:
             raise ValueError("Failed to recognize audio")
         from_object, to_object = self.SplitPrompt(prompt)
