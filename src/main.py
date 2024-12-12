@@ -1,12 +1,13 @@
 
 import threading
-import keyboard
+# import keyboard
+import cv2
 from matplotlib import pyplot as plt
 
 from camera import Camera
 from arm import Arm
-from audio import Audio
-from match import Match
+# from audio import Audio
+# from match import Match
 from proposal import Proposal
 from constants import *
 
@@ -98,7 +99,9 @@ if __name__ == '__main__':
     # print("Exited")
 
     myCamera = Camera()
+    print(1)
     img = myCamera.Capture()
+    print(2)
     # img.save("camera_image.jpg")
     # img.show()
     myCamera.Release()
