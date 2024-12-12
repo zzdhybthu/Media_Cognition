@@ -8,7 +8,7 @@ class Match():
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model, self.preprocess = clip.load(MODEL_NAME, device=self.device)
         
-    def Img2Txt(self, image: Image.Image, texts: list[str]):
+    def Img2Txt(self, image: Image.Image, texts: list):
         image_feature = self.preprocess(image).unsqueeze(0).to(self.device)
         text_features = clip.tokenize(texts).to(self.device)
         with torch.no_grad():
@@ -17,7 +17,7 @@ class Match():
             max_prob, max_index = torch.max(probs, 1)
         return float(max_prob.cpu()), int(max_index.cpu())
     
-    def Txt2Img(self, text: str, images: list[Image.Image]):
+    def Txt2Img(self, text: str, images: list):
         text_feature = clip.tokenize([text]).to(self.device)
         image_features = torch.stack(list(map(self.preprocess, images))).to(self.device)
         with torch.no_grad():
@@ -34,6 +34,6 @@ if __name__ == "__main__":
     print("Max probability:", max_prob)
     print("Max index:", max_index)
     
-    max_prob, max_index = match.Txt2Img("a blue bin", list(map(Image.open, ["image/gray.jpg", "image/green.jpg", "image/red.jpg", "image/blue.jpg", "image/apriltag.png"])))
+    max_prob, max_index = match.Txt2Img("a blue bin", list(map(Image.open, ["image/gray.jpg", "image/green.jpg", "image/red.jpg", "image/blue.jpg"])))
     print("Max probability:", max_prob)
     print("Max index:", max_index)

@@ -1,4 +1,5 @@
 
+
 # import whisper
 # import pyaudio
 # import numpy as np
@@ -168,6 +169,8 @@ def listen_and_recognize():
                         save_to_file(result.strip())
                         print(f"Result saved to 'prompt.txt'.")
 
+                        break
+
                         buffer = []
                         is_awake = False
                         silence_start_time = None
@@ -195,6 +198,17 @@ def listen_and_recognize():
         stream.stop_stream()
         stream.close()
         audio.terminate()
+
+def SplitPrompt():
+    prompt = ""
+    with open(r'prompt.txt','r',encoding='utf-8') as test:
+        test.seek(0, 0)
+        prompt = test.readline()   
+    prompt = prompt.split(' ')
+    obj = prompt[1]
+    box = prompt[3]
+    # print(type((obj, box)))
+    return (obj, box)
 
 
 if __name__ == "__main__":

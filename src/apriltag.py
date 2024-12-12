@@ -46,7 +46,7 @@ class Apriltag:
             
         
 if __name__ == "__main__":
-    img_file_path = "image/test5.jpg"
+    img_file_path = "image/test7.PNG"
     img = Image.open(img_file_path)
     apriltag = Apriltag()
     annotated_image, xyxy = apriltag.MatchTemplate(img, return_image=True)
