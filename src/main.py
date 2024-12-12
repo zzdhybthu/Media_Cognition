@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
         proposal = Proposal()
         w, h = cropped_img.size
-        annotated_image, annotations = proposal.Propose4(cropped_img, return_image=True)
+        annotated_image, annotations = proposal.Propose(cropped_img, return_image=True)
         print(annotations)
         cv2.imshow("Annotated Image", annotated_image)
         cv2.waitKey(0)

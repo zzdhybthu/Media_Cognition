@@ -24,10 +24,10 @@ class Arm(MyCobot280):
 
     def PUT(self, tag):
         self.Forward(COORDS[tag][0])
-        self.Forward(COORDS[tag][1])
+        # self.Forward(COORDS[tag][1])
         self.PumpOff()
-        time.sleep(PUMP_TIME_2)
-        self.Forward(COORDS[tag][0])
+        # time.sleep(PUMP_TIME_2)
+        # self.Forward(COORDS[tag][0])
         
     def PumpOn(self):
         for i in PUMP_PORT:
@@ -56,7 +56,7 @@ class Arm(MyCobot280):
 if __name__ == "__main__":
     arm = Arm('COM17')
     arm.INIT()
-    arm.GET(0, 0)
+    arm.GET(1, 0)
     arm.PUT('ur')
 
     # arm.release_all_servos()
