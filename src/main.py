@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 
 from camera import Camera
 from arm import Arm
-from audio import listen_and_recognize, SplitPrompt
+from audio import listen_and_recognize, zhipu_ai
 from match import Match
 from proposal import Proposal
 from constants import *
@@ -91,6 +91,7 @@ if __name__ == '__main__':
     while True:
         print("Press Enter to start ...")
         keyboard.wait("enter")
+        arm.INIT()
         
         img = myCamera.Capture()
         # img.save("camera_image.jpg")
