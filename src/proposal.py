@@ -52,7 +52,8 @@ class Proposal():
                     ann_merged.append({
                         "label": a["label"],
                         "box": [a["box"]],
-                        "conf": [a["conf"]]
+                        "conf": [a["conf"]],
+                        "deg": p["deg"]
                     })
         for m in ann_merged:
             m["box"] = np.mean(m["box"], axis=0)

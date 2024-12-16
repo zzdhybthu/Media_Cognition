@@ -41,12 +41,14 @@ class Apriltag:
             cv2.rectangle(annotated_image, top_left_dr, bottom_right_dr, (0, 255, 0), 2)
             cv2.circle(annotated_image, (int(xyxy[0]), int(xyxy[1])), 5, (0, 0, 255), -1)
             cv2.circle(annotated_image, (int(xyxy[2]), int(xyxy[3])), 5, (0, 0, 255), -1)
+            cv2.putText(annotated_image, f"ul, x: {xyxy[0]}, y: {xyxy[1]}", (int(xyxy[0] - 100), int(xyxy[1]) - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+            cv2.putText(annotated_image, f"dr, x: {xyxy[2]}, y: {xyxy[3]}", (int(xyxy[2]) - 100, int(xyxy[3]) - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
         
         return annotated_image, xyxy
             
         
 if __name__ == "__main__":
-    img_file_path = "image/test7.PNG"
+    img_file_path = "image/test3.jpg"
     img = Image.open(img_file_path)
     apriltag = Apriltag()
     annotated_image, xyxy = apriltag.MatchTemplate(img, return_image=True)
