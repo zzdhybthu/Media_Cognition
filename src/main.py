@@ -1,9 +1,6 @@
 
-import threading
-import keyboard
 import cv2
 from PIL import Image
-from matplotlib import pyplot as plt
 
 from camera import Camera
 from arm import Arm
@@ -75,79 +72,96 @@ from apriltag import Apriltag
     #     print("Put ...")
     #     self.arm.PUT(tag)
         
-        
 
 if __name__ == '__main__':
 
     # top = TOP()
-
+    print("Initializing ...")
+    
+    print("Initializing Arm ...")
     arm = Arm('COM17')
-    arm.INIT()
-    print("Arm Ready")
 
-    myCamera = Camera()
-    print("Camera Ready!")
+    print("Initializing Camera ...")
+    camera = Camera()
+    
+    print("Initializing Apriltag ...")
+    apriltag = Apriltag()
+    
+    print("Initializing Proposal ...")
+    proposal = Proposal()
+    
+    print("Initializing Match ...")
+    match = Match()
 
+    print("Press Enter to continue ...")
+    input()
+    
     while True:
-        print("Press Enter to start ...")
-        keyboard.wait("enter")
+        print("Arm Initializing ...")
         arm.INIT()
         
-        img = myCamera.Capture()
+        print("Capturing Image ...")
+        img = camera.Capture()
         # img.save("camera_image.jpg")
         # img.show()
 
         # image_path = './image/test4.jpg'
         # with Image.open(image_path) as img:
-        # 此处硬切割，必须保证相机位置不变！！！
+        # 大致的切割，相机位置最好不要变
+        print("Cropping Image ...")
         cropped_img = img.crop((200, 120, 460, 400)) # 260*280
         cropped_img.show()
         # cropped_img.save('cropped_image.jpg')
-
-        apriltag = Apriltag()
+        
+        print("Detecting AprilTag ...")
         april_image, april_xyxy = apriltag.MatchTemplate(cropped_img, return_image=True)
-        print(april_xyxy)
-
-        proposal = Proposal()
         w, h = cropped_img.size
-        annotated_image, annotations = proposal.Propose(cropped_img, return_image=True)
-        print(annotations)
+        print(f"{april_xyxy=}")
+        
+        print("Proposing Regions ...")
+        annotated_image, annotations = proposal.Propose4(cropped_img, return_image=True)
+        print(f"{annotations=}")
         cv2.imshow("Annotated Image", annotated_image)
         cv2.waitKey(0)
 
-
+        print("Listening and Recognizing ...")
         listen_and_recognize()
         with open(r'prompt.txt','r',encoding='utf-8') as test:
             test.seek(0, 0)
             prompt = test.readline()
+        print(f"{prompt=}")
         
-        match = Match()
+        print("Matching for box ...")
         max_prob, max_box_index = match.Txt2Img(prompt, list(map(Image.open, ["image/gray.jpg", "image/green.jpg", "image/blue.jpg", "image/red.jpg"])))
         box_tag = BOX_INDEX[max_box_index]
-        print(box_tag)
+        print(f"{box_tag=}")
 
+        print("Matching for object ...")
         img_list = []
-        for i in range(len(annotations)):
-            coords = annotations[i]["box"]
+        for annotation in annotations:
+            coords = annotation["box"]
             img_i = cropped_img.crop((coords[0], coords[1], coords[2], coords[3]))
+            img_i = img_i.rotate(annotation["deg"])
             # img_i.show()
             img_list.append(img_i)
 
         max_prob, max_obj_index = match.Txt2Img(prompt, img_list)
         coords = annotations[max_obj_index]["box"]
-        print(max_obj_index)
+        print(f"{max_obj_index=}, {coords=}")
 
+        print("Arm Getting ...")
         x_norm = (coords[0] + coords[2] - 2*april_xyxy[0]) / (2*(april_xyxy[2] - april_xyxy[0]))
         y_norm = (coords[1] + coords[3] - 2*april_xyxy[1]) / (2*(april_xyxy[3] - april_xyxy[1]))
-
         arm.GET(pixel_x = x_norm, pixel_y = y_norm)
+
+        print("Arm Putting ...")
         arm.PUT(box_tag)
 
         print("Press Enter to restart / Press Q to exit ...")
         keyboard_input = input()
         if keyboard_input == "q":
             break
+        
     print("Exiting ...")
-    myCamera.Release()
+    camera.Release()
     print("Exited")
-
