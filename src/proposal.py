@@ -8,11 +8,11 @@ import os
 
 class Proposal():
     def __init__(self):
-        # if os.path.exists("./yolov10n.pt"):
-        #     self.m = YOLOv10.from_pretrained("yolov10n.pt", cache_dir='.')
-        # else:
-        #     self.m = YOLOv10.from_pretrained(f'jameslahm/{MODEL_ID}')
-        self.m = YOLOv10('yolov10s.pt')
+        if os.path.exists("./yolov10s.pt"):
+            self.m = YOLOv10('yolov10s.pt')
+        else:
+            print("Warning: Model not found, could downloading from Hugging Face")
+            self.m = YOLOv10.from_pretrained(f'jameslahm/{MODEL_ID}')
     
     def Propose4(self, image: Image.Image, return_image=False):
         predicts = []
@@ -84,10 +84,10 @@ class Proposal():
 
 if __name__ == "__main__":
     proposal = Proposal()
-    image = "image/test4.jpg"
+    image = "image/test6.jpg"
     image = Image.open(image, formats=["JPEG"])
     image = image.convert("RGB")
-    annotated_image, annotations = proposal.Propose(image, return_image=True)
+    annotated_image, annotations = proposal.Propose4(image, return_image=True)
     print(annotations)
     cv2.imshow("Annotated Image", annotated_image)
     cv2.waitKey(0)
