@@ -2,12 +2,15 @@ import cv2
 from constants import *
 from PIL import Image
 from proposal import Proposal
+import time
 
 class Camera():
     def __init__(self):
         self.cap = cv2.VideoCapture(CAMERA_IDX)
         if not self.cap.isOpened():
             raise Exception("Cannot open camera")
+        time.sleep(2)
+        self.Capture()
     
     def Capture(self):
         ret, frame = self.cap.read()
