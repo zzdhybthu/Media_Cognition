@@ -101,26 +101,26 @@ if __name__ == '__main__':
         print("Arm Initializing ...")
         arm.INIT()
         
-        print("Capturing Image ...")
-        img = camera.Capture()
-        # img.save("camera_image.jpg")
-        # img.show()
-
-        # image_path = './image/test4.jpg'
-        # with Image.open(image_path) as img:
-        # 大致的切割，相机位置最好不要变
-        print("Cropping Image ...")
-        cropped_img = img.crop((200, 120, 460, 400)) # 260*280
-        cropped_img.show()
-        # cropped_img.save('cropped_image.jpg')
-        
-        print("Detecting AprilTag ...")
-        april_image, april_xyxy = apriltag.MatchTemplate(cropped_img, return_image=True)
-        w, h = cropped_img.size
-        print(f"{april_xyxy=}")
-        
+        cropped_imgs = []
+        for i in range(3):
+            print("Capturing Image ...")
+            img = camera.Capture()
+            
+            print("Cropping Image ...")
+            cropped_img = img.crop((200, 120, 460, 400)) # 260*280
+            cropped_imgs.append(cropped_img)
+            
+            if i == 0:
+                cropped_img.show()
+                # cropped_img.save('cropped_image.jpg')
+                
+                print("Detecting AprilTag ...")
+                april_image, april_xyxy = apriltag.MatchTemplate(cropped_img, return_image=True)
+                w, h = cropped_img.size
+                print(f"{april_xyxy=}")
+            
         print("Proposing Regions ...")
-        annotated_image, annotations = proposal.Propose4(cropped_img, return_image=True)
+        annotated_image, annotations = proposal.Propose4(cropped_imgs, return_image=True)
         print(f"{annotations=}")
         cv2.imshow("Annotated Image", annotated_image)
         cv2.waitKey(0)
@@ -141,7 +141,7 @@ if __name__ == '__main__':
         img_list = []
         for annotation in annotations:
             coords = annotation["box"]
-            img_i = cropped_img.crop((coords[0], coords[1], coords[2], coords[3]))
+            img_i = cropped_imgs[0].crop((coords[0], coords[1], coords[2], coords[3]))
             img_i = img_i.rotate(annotation["deg"])
             # img_i.show()
             img_list.append(img_i)

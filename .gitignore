@@ -1,4 +1,4 @@
 __pycache__
 ._*
 .DS_Store
-yolov10s.pt
+*.pt
