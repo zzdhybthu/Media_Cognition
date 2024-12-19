@@ -15,7 +15,7 @@ class Proposal():
             print("Warning: Model not found, could downloading from Hugging Face")
             self.m = YOLOv10.from_pretrained(f'jameslahm/{MODEL_ID}')
     
-    def Propose4(self, images: list[Image.Image], return_image=False):
+    def Propose4(self, images: list, return_image=False):
         predicts = []
         for image in images:
             for degree in [0, 90, 180, 270]:

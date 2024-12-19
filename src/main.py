@@ -102,7 +102,7 @@ if __name__ == '__main__':
         arm.INIT()
         
         cropped_imgs = []
-        for i in range(3):
+        for i in range(1):
             print("Capturing Image ...")
             img = camera.Capture()
             

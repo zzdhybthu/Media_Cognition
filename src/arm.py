@@ -26,8 +26,9 @@ class Arm(MyCobot280):
         self.Forward(COORDS[tag][0])
         # self.Forward(COORDS[tag][1])
         self.PumpOff()
-        # time.sleep(PUMP_TIME_2)
+        time.sleep(PUMP_TIME_2)
         # self.Forward(COORDS[tag][0])
+        self.Forward(MIDDLE_COORD)
         
     def PumpOn(self):
         for i in PUMP_PORT:
@@ -55,9 +56,9 @@ class Arm(MyCobot280):
 
 if __name__ == "__main__":
     arm = Arm('COM9')
-    arm.INIT()
-    arm.GET(1, 0.5)
-    arm.PUT('ur')
+    # arm.INIT()
+    # arm.GET(1, 0.5)
+    # arm.PUT('ur')
 
-    # arm.release_all_servos()
-    # print(arm.get_coords())
+    arm.release_all_servos()
+    print(arm.get_coords())
