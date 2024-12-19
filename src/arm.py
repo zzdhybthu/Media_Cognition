@@ -54,7 +54,7 @@ class Arm(MyCobot280):
             return EXCEPTION
 
 if __name__ == "__main__":
-    arm = Arm('COM17')
+    arm = Arm('COM9')
     arm.INIT()
     arm.GET(1, 0.5)
     arm.PUT('ur')

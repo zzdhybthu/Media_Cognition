@@ -16,7 +16,7 @@ FORMAT = pyaudio.paInt16  # 采样格式
 CHANNELS = 1  # 单声道
 RATE = 16000  # 采样率
 SILENCE_THRESHOLD = 500  # 静音阈值（音量）
-SILENCE_DURATION = 2  # 静音检测时长（秒）
+SILENCE_DURATION = 3  # 静音检测时长（秒）
 
 
 def is_silent(audio_data):
