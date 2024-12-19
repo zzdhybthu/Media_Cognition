@@ -121,6 +121,14 @@ if __name__ == '__main__':
             
         print("Proposing Regions ...")
         annotated_image, annotations = proposal.Propose4(cropped_imgs, return_image=True)
+
+        if len(annotations) == 0:
+            print("Detect Nothing! Press enter to continue. q to exit")
+            if input() == 'q':
+                break
+            else:
+                continue
+
         print(f"{annotations=}")
         cv2.imshow("Annotated Image", annotated_image)
         cv2.waitKey(0)
@@ -158,7 +166,7 @@ if __name__ == '__main__':
         print("Arm Putting ...")
         arm.PUT(box_tag)
 
-        print("Press Enter to restart / Press Q to exit ...")
+        print("Press Enter to restart / Press q to exit ...")
         keyboard_input = input()
         if keyboard_input == "q":
             break
