@@ -9,23 +9,25 @@ import os
 class Proposal():
     def __init__(self):
         if os.path.exists("./yolov10s.pt"):
+            print("Using local model yolov10s.pt")
             self.m = YOLOv10('yolov10s.pt')
         else:
             print("Warning: Model not found, could downloading from Hugging Face")
             self.m = YOLOv10.from_pretrained(f'jameslahm/{MODEL_ID}')
     
-    def Propose4(self, image: Image.Image, return_image=False):
+    def Propose4(self, images: list[Image.Image], return_image=False):
         predicts = []
-        for degree in [0, 90, 180, 270]:
-            rotated_image = image.rotate(degree)
-            _, annotations = self.Propose(rotated_image)
-            predicts.append({
-                "deg": degree,
-                "ann": annotations
-            })
+        for image in images:
+            for degree in [0, 90, 180, 270]:
+                rotated_image = image.rotate(degree)
+                _, annotations = self.Propose(rotated_image)
+                predicts.append({
+                    "deg": degree,
+                    "ann": annotations
+                })
             
         # rotate box back
-        w, h = image.size
+        w, h = images[0].size
         delta = (h - w) / 2
         for p in predicts:
             for a in p["ann"]:
@@ -62,7 +64,7 @@ class Proposal():
         
         annotated_image = None
         if return_image:
-            annotated_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+            annotated_image = cv2.cvtColor(np.array(images[0]), cv2.COLOR_RGB2BGR)
             colors = [(0, 255, 0), (0, 0, 255), (255, 0, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255)]
             for pi, p in enumerate(predicts):
                 box = p["box"]
@@ -84,7 +86,7 @@ class Proposal():
 
 if __name__ == "__main__":
     proposal = Proposal()
-    image = "image/test6.jpg"
+    image = "image/test2.jpg"
     image = Image.open(image, formats=["JPEG"])
     image = image.convert("RGB")
     annotated_image, annotations = proposal.Propose4(image, return_image=True)
