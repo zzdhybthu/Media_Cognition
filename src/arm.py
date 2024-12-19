@@ -56,7 +56,7 @@ class Arm(MyCobot280):
 if __name__ == "__main__":
     arm = Arm('COM17')
     arm.INIT()
-    arm.GET(1, 0)
+    arm.GET(1, 0.5)
     arm.PUT('ur')
 
     # arm.release_all_servos()
