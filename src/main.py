@@ -6,6 +6,7 @@ from camera import Camera
 from arm import Arm
 from audio import listen_and_recognize, zhipu_ai
 from match import Match
+
 from proposal import Proposal
 from constants import *
 from apriltag import Apriltag
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     print("Initializing ...")
     
     print("Initializing Arm ...")
-    arm = Arm('COM17')
+    arm = Arm('COM9')
 
     print("Initializing Camera ...")
     camera = Camera()
