@@ -28,7 +28,7 @@ def is_silent(audio_data):
 def transcribe_audio(audio_data):
     """使用 Whisper 模型进行语音识别"""
     audio_array = np.frombuffer(audio_data, np.int16).astype(np.float32) / 32768.0
-    result = model.transcribe(audio_array, fp16=False)
+    result = model.transcribe(audio_array, language = 'English', fp16=False)
     return result.get("text", "")
 
 
@@ -115,8 +115,18 @@ def zhipu_ai(api_key, text, obj_list, colour_list):
             messages=[
                 {
                     "role": "user",
-                    "content": ("你是一个文本处理器 你需要截取一个任务语句中的物品和箱子颜色,物品只可能是[" + obj + "], 颜色只可能是[" + colour + "]. " +
-                                "语句是语音输入的所以有可能不准确 请你在语句中识别出物品或者与物品拼音接近的词语 和 颜色或者与颜色拼音接近的词语 并输出物品和颜色, 我只需要物品和颜色，若语句不正确或没有物品或颜色请 返回“1”仅此而已。语句是“" + text + "”")
+                    # "content": ("你是一个文本处理器 你需要截取一个任务语句中的物品和箱子颜色,物品只可能是[" + obj + "], 颜色只可能是[" + colour + "]. " +
+                    #             "语句是语音输入的所以有可能不准确 请你在语句中识别出物品或者与物品拼音接近的词语 和 颜色或者与颜色拼音接近的词语 并输出物品和颜色, 我只需要物品和颜色，若语句不正确或没有物品或颜色请 返回“1”仅此而已。语句是“" + text + "”")
+                    "content": f"This is a object list: {obj}\
+                                \
+                                This is a colour list: {colour}\
+                                \
+                                This is the task statement: {text}\
+                                \
+                                You are a text processor. You need to extract the object and box color from a task statement. The object and colour can only be in the object list or colour list \
+                                'Since the statement is voice-input, it may not be accurate or according to their own understanding. \
+                                Please identify words that are similar to the object or it's related to the object as 'object', for example 'time' is related to 'clock', 'bone' is related to 'dog', 'fish' is related to 'cat'\
+                                Then, output the object and color. I only need the object and color, return by this format object, colour. If the statement is incorrect or does not contain an object or color, please return '1' and that's all. "
                 }
             ],
         )
